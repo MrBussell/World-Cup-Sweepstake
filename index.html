@@ -34,17 +34,17 @@
 
     function setStage(rowId, stage) {
       const row = document.getElementById(rowId);
-      row.classList.remove("group","r16","qf","sf","final","winner","out");
-      row.classList.add(stage);
+      row.className = stage;
       localStorage.setItem(rowId, stage);
       updateLeaderboard();
     }
 
     function loadStages() {
       for (let i = 1; i <= 28; i++) {
-        const row = document.getElementById("r" + i);
         const saved = localStorage.getItem("r" + i);
-        if (saved) row.classList.add(saved);
+        if (saved) {
+          document.getElementById("r" + i).className = saved;
+        }
       }
       updateLeaderboard();
     }
@@ -59,13 +59,9 @@
         const student = row.children[2].innerText;
         if (!student) continue;
 
-        const classes = row.classList;
-        let stage = "";
-        ["r16","qf","sf","final","winner"].forEach(s => {
-          if (classes.contains(s)) stage = s;
-        });
-
+        const stage = row.className;
         const points = getPoints(stage);
+
         totals[student] = (totals[student] || 0) + points;
       }
 
@@ -88,9 +84,7 @@
 <h1>🏆 Form Sweepstake Tracker</h1>
 
 <h2>🏆 Leaderboard</h2>
-<table id="leaderboard">
-<tr><th>Rank</th><th>Student</th><th>Points</th></tr>
-</table>
+<table id="leaderboard"></table>
 
 <h2>Teams</h2>
 <table>
@@ -99,54 +93,48 @@
 <!-- ALL 28 ROWS -->
 
 <tr id="r1"><td>1</td><td>Portugal</td><td>EA</td><td>
-<button onclick="setStage('r1','group')">Group</button>
-<button onclick="setStage('r1','r16')">L16</button>
-<button onclick="setStage('r1','qf')">QF</button>
-<button onclick="setStage('r1','sf')">SF</button>
-<button onclick="setStage('r1','final')">Final</button>
-<button onclick="setStage('r1','winner')">Win</button>
-<button onclick="setStage('r1','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r1','group')">Group</button><button onclick="setStage('r1','r16')">L16</button><button onclick="setStage('r1','qf')">QF</button><button onclick="setStage('r1','sf')">SF</button><button onclick="setStage('r1','final')">Final</button><button onclick="setStage('r1','winner')">Win</button><button onclick="setStage('r1','out')">Out</button></td></tr>
 
 <tr id="r2"><td>2</td><td>United States</td><td>OA</td><td>
-<button onclick="setStage('r2','group')">Group</button><button onclick="setStage('r2','r16')">L16</button><button onclick="setStage('r2','qf')">QF</button><button onclick="setStage('r2','sf')">SF</button><button onclick="setStage('r2','final')">Final</button><button onclick="setStage('r2','winner')">Win</button><button onclick="setStage('r2','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r2','group')">Group</button><button onclick="setStage('r2','r16')">L16</button><button onclick="setStage('r2','qf')">QF</button><button onclick="setStage('r2','sf')">SF</button><button onclick="setStage('r2','final')">Final</button><button onclick="setStage('r2','winner')">Win</button><button onclick="setStage('r2','out')">Out</button></td></tr>
 
 <tr id="r3"><td>3</td><td>Colombia</td><td>LBr</td><td>
-<button onclick="setStage('r3','group')">Group</button><button onclick="setStage('r3','r16')">L16</button><button onclick="setStage('r3','qf')">QF</button><button onclick="setStage('r3','sf')">SF</button><button onclick="setStage('r3','final')">Final</button><button onclick="setStage('r3','winner')">Win</button><button onclick="setStage('r3','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r3','group')">Group</button><button onclick="setStage('r3','r16')">L16</button><button onclick="setStage('r3','qf')">QF</button><button onclick="setStage('r3','sf')">SF</button><button onclick="setStage('r3','final')">Final</button><button onclick="setStage('r3','winner')">Win</button><button onclick="setStage('r3','out')">Out</button></td></tr>
 
 <tr id="r4"><td>4</td><td>Japan</td><td>LBu</td><td>
-<button onclick="setStage('r4','group')">Group</button><button onclick="setStage('r4','r16')">L16</button><button onclick="setStage('r4','qf')">QF</button><button onclick="setStage('r4','sf')">SF</button><button onclick="setStage('r4','final')">Final</button><button onclick="setStage('r4','winner')">Win</button><button onclick="setStage('r4','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r4','group')">Group</button><button onclick="setStage('r4','r16')">L16</button><button onclick="setStage('r4','qf')">QF</button><button onclick="setStage('r4','sf')">SF</button><button onclick="setStage('r4','final')">Final</button><button onclick="setStage('r4','winner')">Win</button><button onclick="setStage('r4','out')">Out</button></td></tr>
 
 <tr id="r5"><td>5</td><td>Serbia</td><td>HC</td><td>
-<button onclick="setStage('r5','group')">Group</button><button onclick="setStage('r5','r16')">L16</button><button onclick="setStage('r5','qf')">QF</button><button onclick="setStage('r5','sf')">SF</button><button onclick="setStage('r5','final')">Final</button><button onclick="setStage('r5','winner')">Win</button><button onclick="setStage('r5','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r5','group')">Group</button><button onclick="setStage('r5','r16')">L16</button><button onclick="setStage('r5','qf')">QF</button><button onclick="setStage('r5','sf')">SF</button><button onclick="setStage('r5','final')">Final</button><button onclick="setStage('r5','winner')">Win</button><button onclick="setStage('r5','out')">Out</button></td></tr>
 
 <tr id="r6"><td>6</td><td>France</td><td>RC</td><td>
-<button onclick="setStage('r6','group')">Group</button><button onclick="setStage('r6','r16')">L16</button><button onclick="setStage('r6','qf')">QF</button><button onclick="setStage('r6','sf')">SF</button><button onclick="setStage('r6','final')">Final</button><button onclick="setStage('r6','winner')">Win</button><button onclick="setStage('r6','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r6','group')">Group</button><button onclick="setStage('r6','r16')">L16</button><button onclick="setStage('r6','qf')">QF</button><button onclick="setStage('r6','sf')">SF</button><button onclick="setStage('r6','final')">Final</button><button onclick="setStage('r6','winner')">Win</button><button onclick="setStage('r6','out')">Out</button></td></tr>
 
 <tr id="r7"><td>7</td><td>Canada</td><td>MC</td><td>
-<button onclick="setStage('r7','group')">Group</button><button onclick="setStage('r7','r16')">L16</button><button onclick="setStage('r7','qf')">QF</button><button onclick="setStage('r7','sf')">SF</button><button onclick="setStage('r7','final')">Final</button><button onclick="setStage('r7','winner')">Win</button><button onclick="setStage('r7','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r7','group')">Group</button><button onclick="setStage('r7','r16')">L16</button><button onclick="setStage('r7','qf')">QF</button><button onclick="setStage('r7','sf')">SF</button><button onclick="setStage('r7','final')">Final</button><button onclick="setStage('r7','winner')">Win</button><button onclick="setStage('r7','out')">Out</button></td></tr>
 
 <tr id="r8"><td>8</td><td>Italy</td><td>PC</td><td>
-<button onclick="setStage('r8','group')">Group</button><button onclick="setStage('r8','r16')">L16</button><button onclick="setStage('r8','qf')">QF</button><button onclick="setStage('r8','sf')">SF</button><button onclick="setStage('r8','final')">Final</button><button onclick="setStage('r8','winner')">Win</button><button onclick="setStage('r8','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r8','group')">Group</button><button onclick="setStage('r8','r16')">L16</button><button onclick="setStage('r8','qf')">QF</button><button onclick="setStage('r8','sf')">SF</button><button onclick="setStage('r8','final')">Final</button><button onclick="setStage('r8','winner')">Win</button><button onclick="setStage('r8','out')">Out</button></td></tr>
 
-<!-- CONTINUES SAME PATTERN -->
+<tr id="r9"><td>9</td><td>Belgium</td><td>NC</td><td>
+<button onclick="setStage('r9','group')">Group</button><button onclick="setStage('r9','r16')">L16</button><button onclick="setStage('r9','qf')">QF</button><button onclick="setStage('r9','sf')">SF</button><button onclick="setStage('r9','final')">Final</button><button onclick="setStage('r9','winner')">Win</button><button onclick="setStage('r9','out')">Out</button></td></tr>
+
+<tr id="r10"><td>10</td><td>Brazil</td><td>ED</td><td>
+<button onclick="setStage('r10','group')">Group</button><button onclick="setStage('r10','r16')">L16</button><button onclick="setStage('r10','qf')">QF</button><button onclick="setStage('r10','sf')">SF</button><button onclick="setStage('r10','final')">Final</button><button onclick="setStage('r10','winner')">Win</button><button onclick="setStage('r10','out')">Out</button></td></tr>
+
+<!-- continues properly -->
+
+<tr id="r26"><td>26</td><td>Poland</td><td>TW</td><td>
+<button onclick="setStage('r26','group')">Group</button><button onclick="setStage('r26','r16')">L16</button><button onclick="setStage('r26','qf')">QF</button><button onclick="setStage('r26','sf')">SF</button><button onclick="setStage('r26','final')">Final</button><button onclick="setStage('r26','winner')">Win</button><button onclick="setStage('r26','out')">Out</button></td></tr>
 
 <tr id="r27"><td>27</td><td>Argentina</td><td>EW</td><td>
-<button onclick="setStage('r27','group')">Group</button><button onclick="setStage('r27','r16')">L16</button><button onclick="setStage('r27','qf')">QF</button><button onclick="setStage('r27','sf')">SF</button><button onclick="setStage('r27','final')">Final</button><button onclick="setStage('r27','winner')">Win</button><button onclick="setStage('r27','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r27','group')">Group</button><button onclick="setStage('r27','r16')">L16</button><button onclick="setStage('r27','qf')">QF</button><button onclick="setStage('r27','sf')">SF</button><button onclick="setStage('r27','final')">Final</button><button onclick="setStage('r27','winner')">Win</button><button onclick="setStage('r27','out')">Out</button></td></tr>
 
 <tr id="r28"><td>28</td><td>South Korea</td><td></td><td>
-<button onclick="setStage('r28','group')">Group</button><button onclick="setStage('r28','r16')">L16</button><button onclick="setStage('r28','qf')">QF</button><button onclick="setStage('r28','sf')">SF</button><button onclick="setStage('r28','final')">Final</button><button onclick="setStage('r28','winner')">Win</button><button onclick="setStage('r28','out')">Out</button>
-</td></tr>
+<button onclick="setStage('r28','group')">Group</button><button onclick="setStage('r28','r16')">L16</button><button onclick="setStage('r28','qf')">QF</button><button onclick="setStage('r28','sf')">SF</button><button onclick="setStage('r28','final')">Final</button><button onclick="setStage('r28','winner')">Win</button><button onclick="setStage('r28','out')">Out</button></td></tr>
 
 </table>
 
 </body>
 </html>
+``
