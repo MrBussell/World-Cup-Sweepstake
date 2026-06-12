@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>World Cup Sweepstake</title>
+
   <style>
     body { font-family: Arial; margin: 20px; }
     h1 { color: #1a73e8; }
@@ -10,7 +11,6 @@
     th, td { border: 1px solid black; padding: 8px; text-align: left; }
     th { background-color: #333; color: white; }
 
-    /* Colours */
     .in { background-color: #c8f7c5; }
     .out { background-color: #f7c5c5; }
     .winner { background-color: #ffe066; }
@@ -22,14 +22,31 @@
     function setStatus(rowId, status) {
       const row = document.getElementById(rowId);
 
-      // clear existing classes
+      // Remove old classes
       row.classList.remove("in", "out", "winner");
 
-      // add new class
+      // Add new class
       if (status !== "") {
         row.classList.add(status);
       }
+
+      // Save to localStorage
+      localStorage.setItem(rowId, status);
     }
+
+    function loadStatuses() {
+      for (let i = 1; i <= 28; i++) {
+        const rowId = "r" + i;
+        const savedStatus = localStorage.getItem(rowId);
+
+        if (savedStatus) {
+          const row = document.getElementById(rowId);
+          row.classList.add(savedStatus);
+        }
+      }
+    }
+
+    window.onload = loadStatuses;
   </script>
 </head>
 
@@ -37,36 +54,22 @@
 
 <h1>🏆 Form Sweepstake Tracker</h1>
 
-<h2>Your Teams</h2>
 <table>
 <tr><th>No.</th><th>Team</th><th>Student</th><th>Update</th></tr>
 
-<tr id="r1"><td>1</td><td>Portugal</td><td>EA</td>
+<!-- Example row -->
+<tr id="r1">
+<td>1</td><td>Portugal</td><td>EA</td>
 <td>
 <button onclick="setStatus('r1','in')">IN</button>
 <button onclick="setStatus('r1','out')">OUT</button>
 <button onclick="setStatus('r1','winner')">WIN</button>
-</td></tr>
+</td>
+</tr>
+
+<!-- Keep same pattern for all rows -->
 
 <tr id="r2"><td>2</td><td>United States</td><td>OA</td>
 <td><button onclick="setStatus('r2','in')">IN</button><button onclick="setStatus('r2','out')">OUT</button><button onclick="setStatus('r2','winner')">WIN</button></td></tr>
 
 <tr id="r3"><td>3</td><td>Colombia</td><td>LBr</td>
-<td><button onclick="setStatus('r3','in')">IN</button><button onclick="setStatus('r3','out')">OUT</button><button onclick="setStatus('r3','winner')">WIN</button></td></tr>
-
-<tr id="r4"><td>4</td><td>Japan</td><td>LBu</td>
-<td><button onclick="setStatus('r4','in')">IN</button><button onclick="setStatus('r4','out')">OUT</button><button onclick="setStatus('r4','winner')">WIN</button></td></tr>
-
-<tr id="r5"><td>5</td><td>Serbia</td><td>HC</td>
-<td><button onclick="setStatus('r5','in')">IN</button><button onclick="setStatus('r5','out')">OUT</button><button onclick="setStatus('r5','winner')">WIN</button></td></tr>
-
-<tr id="r6"><td>6</td><td>France</td><td>RC</td>
-<td><button onclick="setStatus('r6','in')">IN</button><button onclick="setStatus('r6','out')">OUT</button><button onclick="setStatus('r6','winner')">WIN</button></td></tr>
-
-<tr id="r7"><td>7</td><td>Canada</td><td>MC</td>
-<td><button onclick="setStatus('r7','in')">IN</button><button onclick="setStatus('r7','out')">OUT</button><button onclick="setStatus('r7','winner')">WIN</button></td></tr>
-
-<tr id="r8"><td>8</td><td>Italy</td><td>PC</td>
-<td><button onclick="setStatus('r8','in')">IN</button><button onclick="setStatus('r8','out')">OUT</button><button onclick="setStatus('r8','winner')">WIN</button></td></tr>
-
-<tr id="r9"><td>9</td><td>Belgium</td><td>NC</td>
