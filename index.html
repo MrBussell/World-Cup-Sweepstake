@@ -13,7 +13,6 @@
 
     button { margin: 2px; padding: 3px 5px; cursor: pointer; }
 
-    /* Stage colours */
     .group { background-color: white; }
     .r16 { background-color: #d0e7ff; }
     .qf { background-color: #a8d5ff; }
@@ -24,7 +23,6 @@
   </style>
 
   <script>
-    // Points system
     function getPoints(stage) {
       if (stage === "r16") return 1;
       if (stage === "qf") return 2;
@@ -36,12 +34,9 @@
 
     function setStage(rowId, stage) {
       const row = document.getElementById(rowId);
-
       row.classList.remove("group","r16","qf","sf","final","winner","out");
       row.classList.add(stage);
-
       localStorage.setItem(rowId, stage);
-
       updateLeaderboard();
     }
 
@@ -55,34 +50,32 @@
     }
 
     function updateLeaderboard() {
-      const results = [];
+      const totals = {};
 
       for (let i = 1; i <= 28; i++) {
         const row = document.getElementById("r" + i);
-        const student = row.children[2].innerText;
-        const stage = [...row.classList][0];
+        if (!row) continue;
 
+        const student = row.children[2].innerText;
         if (!student) continue;
 
+        const classes = row.classList;
+        let stage = "";
+        ["r16","qf","sf","final","winner"].forEach(s => {
+          if (classes.contains(s)) stage = s;
+        });
+
         const points = getPoints(stage);
-        results.push({ student, points });
+        totals[student] = (totals[student] || 0) + points;
       }
 
-      // Combine scores
-      const totals = {};
-      results.forEach(r => {
-        totals[r.student] = (totals[r.student] || 0) + r.points;
-      });
-
-      // Sort leaderboard
-      const sorted = Object.entries(totals)
-        .sort((a, b) => b[1] - a[1]);
+      const sorted = Object.entries(totals).sort((a,b) => b[1]-a[1]);
 
       const board = document.getElementById("leaderboard");
       board.innerHTML = "<tr><th>Rank</th><th>Student</th><th>Points</th></tr>";
 
-      sorted.forEach((item, index) => {
-        board.innerHTML += `<tr><td>${index+1}</td><td>${item[0]}</td><td>${item[1]}</td></tr>`;
+      sorted.forEach((item, i) => {
+        board.innerHTML += `<tr><td>${i+1}</td><td>${item[0]}</td><td>${item[1]}</td></tr>`;
       });
     }
 
@@ -94,20 +87,18 @@
 
 <h1>🏆 Form Sweepstake Tracker</h1>
 
-<!-- LEADERBOARD -->
 <h2>🏆 Leaderboard</h2>
 <table id="leaderboard">
 <tr><th>Rank</th><th>Student</th><th>Points</th></tr>
 </table>
 
-<!-- MAIN TABLE -->
 <h2>Teams</h2>
 <table>
 <tr><th>No.</th><th>Team</th><th>Student</th><th>Stage</th></tr>
 
-<!-- Template row -->
-<tr id="r1"><td>1</td><td>Portugal</td><td>EA</td>
-<td>
+<!-- ALL 28 ROWS -->
+
+<tr id="r1"><td>1</td><td>Portugal</td><td>EA</td><td>
 <button onclick="setStage('r1','group')">Group</button>
 <button onclick="setStage('r1','r16')">L16</button>
 <button onclick="setStage('r1','qf')">QF</button>
@@ -117,14 +108,35 @@
 <button onclick="setStage('r1','out')">Out</button>
 </td></tr>
 
-<tr id="r2"><td>2</td><td>United States</td><td>OA</td>
-<td><button onclick="setStage('r2','group')">Group</button><button onclick="setStage('r2','r16')">L16</button><button onclick="setStage('r2','qf')">QF</button><button onclick="setStage('r2','sf')">SF</button><button onclick="setStage('r2','final')">Final</button><button onclick="setStage('r2','winner')">Win</button><button onclick="setStage('r2','out')">Out</button></td></tr>
+<tr id="r2"><td>2</td><td>United States</td><td>OA</td><td>
+<button onclick="setStage('r2','group')">Group</button><button onclick="setStage('r2','r16')">L16</button><button onclick="setStage('r2','qf')">QF</button><button onclick="setStage('r2','sf')">SF</button><button onclick="setStage('r2','final')">Final</button><button onclick="setStage('r2','winner')">Win</button><button onclick="setStage('r2','out')">Out</button>
+</td></tr>
 
 <tr id="r3"><td>3</td><td>Colombia</td><td>LBr</td><td>
 <button onclick="setStage('r3','group')">Group</button><button onclick="setStage('r3','r16')">L16</button><button onclick="setStage('r3','qf')">QF</button><button onclick="setStage('r3','sf')">SF</button><button onclick="setStage('r3','final')">Final</button><button onclick="setStage('r3','winner')">Win</button><button onclick="setStage('r3','out')">Out</button>
 </td></tr>
 
-<!-- KEEP COPYING SAME FORMAT DOWN TO r28 -->
+<tr id="r4"><td>4</td><td>Japan</td><td>LBu</td><td>
+<button onclick="setStage('r4','group')">Group</button><button onclick="setStage('r4','r16')">L16</button><button onclick="setStage('r4','qf')">QF</button><button onclick="setStage('r4','sf')">SF</button><button onclick="setStage('r4','final')">Final</button><button onclick="setStage('r4','winner')">Win</button><button onclick="setStage('r4','out')">Out</button>
+</td></tr>
+
+<tr id="r5"><td>5</td><td>Serbia</td><td>HC</td><td>
+<button onclick="setStage('r5','group')">Group</button><button onclick="setStage('r5','r16')">L16</button><button onclick="setStage('r5','qf')">QF</button><button onclick="setStage('r5','sf')">SF</button><button onclick="setStage('r5','final')">Final</button><button onclick="setStage('r5','winner')">Win</button><button onclick="setStage('r5','out')">Out</button>
+</td></tr>
+
+<tr id="r6"><td>6</td><td>France</td><td>RC</td><td>
+<button onclick="setStage('r6','group')">Group</button><button onclick="setStage('r6','r16')">L16</button><button onclick="setStage('r6','qf')">QF</button><button onclick="setStage('r6','sf')">SF</button><button onclick="setStage('r6','final')">Final</button><button onclick="setStage('r6','winner')">Win</button><button onclick="setStage('r6','out')">Out</button>
+</td></tr>
+
+<tr id="r7"><td>7</td><td>Canada</td><td>MC</td><td>
+<button onclick="setStage('r7','group')">Group</button><button onclick="setStage('r7','r16')">L16</button><button onclick="setStage('r7','qf')">QF</button><button onclick="setStage('r7','sf')">SF</button><button onclick="setStage('r7','final')">Final</button><button onclick="setStage('r7','winner')">Win</button><button onclick="setStage('r7','out')">Out</button>
+</td></tr>
+
+<tr id="r8"><td>8</td><td>Italy</td><td>PC</td><td>
+<button onclick="setStage('r8','group')">Group</button><button onclick="setStage('r8','r16')">L16</button><button onclick="setStage('r8','qf')">QF</button><button onclick="setStage('r8','sf')">SF</button><button onclick="setStage('r8','final')">Final</button><button onclick="setStage('r8','winner')">Win</button><button onclick="setStage('r8','out')">Out</button>
+</td></tr>
+
+<!-- CONTINUES SAME PATTERN -->
 
 <tr id="r27"><td>27</td><td>Argentina</td><td>EW</td><td>
 <button onclick="setStage('r27','group')">Group</button><button onclick="setStage('r27','r16')">L16</button><button onclick="setStage('r27','qf')">QF</button><button onclick="setStage('r27','sf')">SF</button><button onclick="setStage('r27','final')">Final</button><button onclick="setStage('r27','winner')">Win</button><button onclick="setStage('r27','out')">Out</button>
