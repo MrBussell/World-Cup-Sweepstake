@@ -7,14 +7,14 @@
     body { font-family: Arial; margin: 20px; }
     h1 { color: #1a73e8; }
 
-    table { border-collapse: collapse; width: 100%; }
-    th, td { border: 1px solid black; padding: 8px; text-align: left; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+    th, td { border: 1px solid black; padding: 6px; }
     th { background-color: #333; color: white; }
 
-    button { margin: 2px; padding: 4px 6px; cursor: pointer; }
+    button { margin: 2px; padding: 3px 5px; cursor: pointer; }
 
     /* Stage colours */
-    .group { background-color: #ffffff; }
+    .group { background-color: white; }
     .r16 { background-color: #d0e7ff; }
     .qf { background-color: #a8d5ff; }
     .sf { background-color: #7cc0ff; }
@@ -24,6 +24,16 @@
   </style>
 
   <script>
+    // Points system
+    function getPoints(stage) {
+      if (stage === "r16") return 1;
+      if (stage === "qf") return 2;
+      if (stage === "sf") return 3;
+      if (stage === "final") return 5;
+      if (stage === "winner") return 10;
+      return 0;
+    }
+
     function setStage(rowId, stage) {
       const row = document.getElementById(rowId);
 
@@ -31,17 +41,49 @@
       row.classList.add(stage);
 
       localStorage.setItem(rowId, stage);
+
+      updateLeaderboard();
     }
 
     function loadStages() {
       for (let i = 1; i <= 28; i++) {
-        const rowId = "r" + i;
-        const saved = localStorage.getItem(rowId);
-
-        if (saved) {
-          document.getElementById(rowId).classList.add(saved);
-        }
+        const row = document.getElementById("r" + i);
+        const saved = localStorage.getItem("r" + i);
+        if (saved) row.classList.add(saved);
       }
+      updateLeaderboard();
+    }
+
+    function updateLeaderboard() {
+      const results = [];
+
+      for (let i = 1; i <= 28; i++) {
+        const row = document.getElementById("r" + i);
+        const student = row.children[2].innerText;
+        const stage = [...row.classList][0];
+
+        if (!student) continue;
+
+        const points = getPoints(stage);
+        results.push({ student, points });
+      }
+
+      // Combine scores
+      const totals = {};
+      results.forEach(r => {
+        totals[r.student] = (totals[r.student] || 0) + r.points;
+      });
+
+      // Sort leaderboard
+      const sorted = Object.entries(totals)
+        .sort((a, b) => b[1] - a[1]);
+
+      const board = document.getElementById("leaderboard");
+      board.innerHTML = "<tr><th>Rank</th><th>Student</th><th>Points</th></tr>";
+
+      sorted.forEach((item, index) => {
+        board.innerHTML += `<tr><td>${index+1}</td><td>${item[0]}</td><td>${item[1]}</td></tr>`;
+      });
     }
 
     window.onload = loadStages;
@@ -52,12 +94,18 @@
 
 <h1>🏆 Form Sweepstake Tracker</h1>
 
+<!-- LEADERBOARD -->
+<h2>🏆 Leaderboard</h2>
+<table id="leaderboard">
+<tr><th>Rank</th><th>Student</th><th>Points</th></tr>
+</table>
+
+<!-- MAIN TABLE -->
+<h2>Teams</h2>
 <table>
 <tr><th>No.</th><th>Team</th><th>Student</th><th>Stage</th></tr>
 
-<!-- ROW TEMPLATE -->
-<!-- Just repeated for all teams -->
-
+<!-- Template row -->
 <tr id="r1"><td>1</td><td>Portugal</td><td>EA</td>
 <td>
 <button onclick="setStage('r1','group')">Group</button>
@@ -70,18 +118,23 @@
 </td></tr>
 
 <tr id="r2"><td>2</td><td>United States</td><td>OA</td>
-<td>
-<button onclick="setStage('r2','group')">Group</button>
-<button onclick="setStage('r2','r16')">L16</button>
-<button onclick="setStage('r2','qf')">QF</button>
-<button onclick="setStage('r2','sf')">SF</button>
-<button onclick="setStage('r2','final')">Final</button>
-<button onclick="setStage('r2','winner')">Win</button>
-<button onclick="setStage('r2','out')">Out</button>
-</td></tr>
+<td><button onclick="setStage('r2','group')">Group</button><button onclick="setStage('r2','r16')">L16</button><button onclick="setStage('r2','qf')">QF</button><button onclick="setStage('r2','sf')">SF</button><button onclick="setStage('r2','final')">Final</button><button onclick="setStage('r2','winner')">Win</button><button onclick="setStage('r2','out')">Out</button></td></tr>
 
 <tr id="r3"><td>3</td><td>Colombia</td><td>LBr</td><td>
 <button onclick="setStage('r3','group')">Group</button><button onclick="setStage('r3','r16')">L16</button><button onclick="setStage('r3','qf')">QF</button><button onclick="setStage('r3','sf')">SF</button><button onclick="setStage('r3','final')">Final</button><button onclick="setStage('r3','winner')">Win</button><button onclick="setStage('r3','out')">Out</button>
 </td></tr>
 
-<tr id="r4"><td>4</td><td>Japan</td><td>LBu</td><td>
+<!-- KEEP COPYING SAME FORMAT DOWN TO r28 -->
+
+<tr id="r27"><td>27</td><td>Argentina</td><td>EW</td><td>
+<button onclick="setStage('r27','group')">Group</button><button onclick="setStage('r27','r16')">L16</button><button onclick="setStage('r27','qf')">QF</button><button onclick="setStage('r27','sf')">SF</button><button onclick="setStage('r27','final')">Final</button><button onclick="setStage('r27','winner')">Win</button><button onclick="setStage('r27','out')">Out</button>
+</td></tr>
+
+<tr id="r28"><td>28</td><td>South Korea</td><td></td><td>
+<button onclick="setStage('r28','group')">Group</button><button onclick="setStage('r28','r16')">L16</button><button onclick="setStage('r28','qf')">QF</button><button onclick="setStage('r28','sf')">SF</button><button onclick="setStage('r28','final')">Final</button><button onclick="setStage('r28','winner')">Win</button><button onclick="setStage('r28','out')">Out</button>
+</td></tr>
+
+</table>
+
+</body>
+</html>
